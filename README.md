@@ -4,7 +4,7 @@ An Ecommerce Web Application built with React, Redux, Node, Express & MongoDB.
 
 ## Website
 
-The website is hosted at [social-api-dashboard.cyclic.app](https://social-api-dashboard.cyclic.app).
+The website is hosted at [nixlab-shop.cyclic.app](https://snixlab-shop.cyclic.app).
 
 ## Authors
 
