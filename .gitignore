@@ -3,6 +3,8 @@
 /.pnp
 .pnp.js
 
+/build/
+
 # testing
 /coverage
 
