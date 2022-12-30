@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -r node_modules && npm cache clean --force",
+    "build": "react-scripts build",
     "build:dev": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
