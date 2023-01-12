@@ -1,5 +1,4 @@
 import apiClient from "../../api/apiClient";
-import axios from "axios";
 import {
   ALL_PRODUCT_FAIL,
   ALL_PRODUCT_REQUEST,
@@ -139,6 +138,7 @@ export const getAdminProduct = (token) => async (dispatch) => {
   }
 
   dispatch({ type: ADMIN_PRODUCT_REQUEST });
+
   try {
     const options = {};
 
@@ -168,171 +168,345 @@ export const getAdminProduct = (token) => async (dispatch) => {
 
 // Create Product
 export const createProduct = (productData, token) => async (dispatch) => {
-  try {
-    dispatch({ type: NEW_PRODUCT_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: NEW_PRODUCT_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!productData) {
+    dispatch({
+      type: NEW_PRODUCT_FAIL,
+      payload: 'Product data is required',
+    });
+    return;
+  }
+
+  dispatch({ type: NEW_PRODUCT_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data',
     };
 
-    const { data } = await axios.post(
-      `/api/v1/admin/product/create`,
-      productData,
-      config
-    );
+    const response = await apiClient.post(`/admin/product/create`, productData, options);
 
-    dispatch({
-      type: NEW_PRODUCT_SUCCESS,
-      payload: data,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: NEW_PRODUCT_SUCCESS,
+        payload: response,
+      });
+    }
+    else {
+      dispatch({
+        type: NEW_PRODUCT_FAIL,
+        payload: response.message || 'An error occurred while creating new product',
+      });
+    }
   } catch (error) {
     dispatch({
       type: NEW_PRODUCT_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Update Product
 export const updateProduct = (id, productData, token) => async (dispatch) => {
-  try {
-    dispatch({ type: UPDATE_PRODUCT_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!id) {
+    dispatch({
+      type: UPDATE_PRODUCT_FAIL,
+      payload: 'Product ID is required',
+    });
+    return;
+  }
+
+  if (!token) {
+    dispatch({
+      type: UPDATE_PRODUCT_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!productData) {
+    dispatch({
+      type: UPDATE_PRODUCT_FAIL,
+      payload: 'Product data is required',
+    });
+    return;
+  }
+
+  dispatch({ type: UPDATE_PRODUCT_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data',
     };
 
-    const { data } = await axios.put(
-      `/api/v1/admin/product/${id}`,
-      productData,
-      config
-    );
+    const response = await apiClient.put(`/admin/product/${id}`, productData, options);
 
-    dispatch({
-      type: UPDATE_PRODUCT_SUCCESS,
-      payload: data.success,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: UPDATE_PRODUCT_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: UPDATE_PRODUCT_FAIL,
+        payload: response.message || 'An error occurred while updating product details',
+      });
+    }
   } catch (error) {
     dispatch({
       type: UPDATE_PRODUCT_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Delete Product
 export const deleteProduct = (id, token) => async (dispatch) => {
-  try {
-    dispatch({ type: DELETE_PRODUCT_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!id) {
+    dispatch({
+      type: DELETE_PRODUCT_FAIL,
+      payload: 'Product ID is required',
+    });
+    return;
+  }
+
+  if (!token) {
+    dispatch({
+      type: DELETE_PRODUCT_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  dispatch({ type: DELETE_PRODUCT_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.delete(`/api/v1/admin/product/${id}`, config);
+    const response = await apiClient.delete(`/admin/product/${id}`, options);
 
-    dispatch({
-      type: DELETE_PRODUCT_SUCCESS,
-      payload: data.success,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: DELETE_PRODUCT_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: DELETE_PRODUCT_FAIL,
+        payload: response.message || 'An error occurred while creating new product',
+      });
+    }
   } catch (error) {
     dispatch({
       type: DELETE_PRODUCT_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // NEW REVIEW
 export const newReview = (reviewData, token) => async (dispatch) => {
-  try {
-    dispatch({ type: NEW_REVIEW_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: NEW_REVIEW_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!reviewData) {
+    dispatch({
+      type: NEW_REVIEW_FAIL,
+      payload: 'Review data is required',
+    });
+    return;
+  }
+
+  dispatch({ type: NEW_REVIEW_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.put(`/api/v1/review`, reviewData, config);
+    const response = await apiClient.put(`/review`, reviewData, options);
 
-    dispatch({
-      type: NEW_REVIEW_SUCCESS,
-      payload: data.success,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: NEW_REVIEW_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: NEW_REVIEW_FAIL,
+        payload: response.message || 'An error occurred while creating a review',
+      });
+    }
   } catch (error) {
     dispatch({
       type: NEW_REVIEW_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Get All Reviews of a Product
 export const getAllReviews = (id, token) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_REVIEW_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: ALL_REVIEW_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!id) {
+    dispatch({
+      type: ALL_REVIEW_FAIL,
+      payload: 'Product ID is required',
+    });
+    return;
+  }
+
+  dispatch({ type: ALL_REVIEW_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.get(`/api/v1/reviews?id=${id}`, config);
+    const response = await apiClient.get(`/reviews?id=${id}`, options);
 
-    dispatch({
-      type: ALL_REVIEW_SUCCESS,
-      payload: data.results,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: ALL_REVIEW_SUCCESS,
+        payload: response.results,
+      });
+    }
+    else {
+      dispatch({
+        type: ALL_REVIEW_FAIL,
+        payload: response.message || 'An error occurred while fetching reviews',
+      });
+    }
   } catch (error) {
     dispatch({
       type: ALL_REVIEW_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Delete Review of a Product
-export const deleteReviews =
-  (reviewId, productId, token) => async (dispatch) => {
-    try {
-      dispatch({ type: DELETE_REVIEW_REQUEST });
+export const deleteReviews = (reviewId, productId, token) => async (dispatch) => {
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
+  if (!token) {
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
 
-      const { data } = await axios.delete(
-        `/api/v1/reviews?id=${reviewId}&productId=${productId}`,
-        config
-      );
+  if (!productId) {
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
+      payload: 'ProductId is required',
+    });
+    return;
+  }
 
+  if (!reviewId) {
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
+      payload: 'ReviewId is required',
+    });
+    return;
+  }
+
+  dispatch({ type: DELETE_REVIEW_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
+    };
+
+    const response = await apiClient.delete(`/reviews?id=${reviewId}&productId=${productId}`, options);
+
+    if (response.status === 200) {
       dispatch({
         type: DELETE_REVIEW_SUCCESS,
-        payload: data.success,
-      });
-    } catch (error) {
-      dispatch({
-        type: DELETE_REVIEW_FAIL,
-        payload: error.response.data.message,
+        payload: response.success,
       });
     }
-  };
+    else {
+      dispatch({
+        type: DELETE_REVIEW_FAIL,
+        payload: response.message || 'An error occurred while deleting review',
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
+      payload: error.message || error,
+    });
+  }
+};
 
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {

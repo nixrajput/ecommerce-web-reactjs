@@ -70,17 +70,48 @@ function ProductDetails() {
     open ? setOpen(false) : setOpen(true);
   };
 
-  const reviewSubmitHandler = () => {
+  const reviewSubmitHandler = (e) => {
+    e.preventDefault();
     const myForm = new FormData();
 
     myForm.set("rating", rating);
     myForm.set("comment", comment);
     myForm.set("productId", id);
 
+    if (myForm.get("rating") === 0) {
+      alert.error("Please select a rating");
+      return;
+    }
+
+    if (myForm.get("comment") === "") {
+      alert.error("Please enter a comment");
+      return;
+    }
+
+    if (!id || id === "") {
+      alert.error("Product id not found");
+      return;
+    }
+
+    console.log("myForm", myForm);
+
     dispatch(newReview(myForm, token));
 
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (success) {
+      alert.success("Review Added Successfully.");
+      dispatch({ type: NEW_REVIEW_RESET });
+    }
+
+    if (id) {
+      dispatch(getProductDetails(id));
+    }
+
+    return () => { };
+  }, [dispatch, id, alert, success]);
 
   useEffect(() => {
     if (error) {
@@ -93,17 +124,8 @@ function ProductDetails() {
       dispatch(clearErrors());
     }
 
-    if (success) {
-      alert.success("Review Added Successfully.");
-      dispatch({ type: NEW_REVIEW_RESET });
-    }
-
-    if (id) {
-      dispatch(getProductDetails(id));
-    }
-
     return () => { };
-  }, [dispatch, id, error, alert, reviewError, success]);
+  }, [dispatch, error, reviewError, alert]);
 
   return (
     <div className="app__top-margin">
@@ -244,10 +266,10 @@ function ProductDetails() {
           <DialogTitle>Add Review</DialogTitle>
 
           <DialogContent className="review-dialog">
-            <form onSubmit={reviewSubmitHandler}>
+            <form onSubmit={(e) => reviewSubmitHandler(e)}>
               <Rating
                 onChange={(e) => setRating(e.target.value)}
-                value={rating}
+                value={Number(rating)}
                 size="large"
               />
 

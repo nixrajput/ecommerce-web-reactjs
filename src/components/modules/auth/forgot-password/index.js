@@ -34,11 +34,6 @@ function ForgotPassword() {
   };
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-
     if (message) {
       alert.success(message);
       navigate("/auth/login");
@@ -48,8 +43,17 @@ function ForgotPassword() {
       });
     }
 
-    return () => {};
-  }, [dispatch, error, alert, message, navigate]);
+    return () => { };
+  }, [dispatch, alert, message, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+
+    return () => { };
+  }, [dispatch, error, alert]);
 
   return (
     <>

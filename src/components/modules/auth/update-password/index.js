@@ -37,11 +37,6 @@ function UpdatePassword() {
   };
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-
     if (isUpdated) {
       alert.success("Password Changed Successfully");
 
@@ -50,8 +45,17 @@ function UpdatePassword() {
       dispatch({ type: UPDATE_PASSWORD_RESET });
     }
 
-    return () => {};
-  }, [dispatch, error, alert, navigate, isUpdated]);
+    return () => { };
+  }, [dispatch, alert, navigate, isUpdated]);
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+
+    return () => { };
+  }, [dispatch, error, alert]);
 
   return (
     <div className="app__top-margin">

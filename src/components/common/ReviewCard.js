@@ -2,7 +2,7 @@ import Rating from "@mui/material/Rating";
 
 function ReviewCard({ review }) {
   const options = {
-    value: review.rating,
+    value: Number(review.rating),
     readOnly: true,
     precision: 0.5,
   };

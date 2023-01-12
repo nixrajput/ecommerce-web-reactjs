@@ -19,12 +19,17 @@ function Home() {
   const { loading, error, products } = useSelector((state) => state.products);
 
   useEffect(() => {
+    dispatch(getProducts());
+
+    return () => { };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
 
-    dispatch(getProducts());
     return () => { };
   }, [dispatch, error, alert]);
 

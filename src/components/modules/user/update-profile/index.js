@@ -63,11 +63,6 @@ function UpdateProfile() {
       setAvatarPreview(user.avatar?.url || profilePng);
     }
 
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-
     if (isUpdated) {
       alert.success("Profile Updated Successfully.");
       dispatch(loadUser(token));
@@ -79,8 +74,17 @@ function UpdateProfile() {
       });
     }
 
-    return () => {};
-  }, [alert, dispatch, error, isUpdated, navigate, user, token]);
+    return () => { };
+  }, [alert, dispatch, isUpdated, navigate, user, token]);
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+
+    return () => { };
+  }, [dispatch, error, alert]);
 
   return (
     <div className="app__top-margin">

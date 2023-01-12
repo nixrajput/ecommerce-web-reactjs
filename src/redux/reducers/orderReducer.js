@@ -41,6 +41,7 @@ export const newOrderReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       };
+
     case CLEAR_ERRORS:
       return {
         ...state,

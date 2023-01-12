@@ -33,17 +33,21 @@ function Login() {
       from = `/${location.search.split("=")[1]}`;
     }
 
+    if (isAuthenticated) {
+      navigate(from);
+    }
+
+    return () => { };
+  }, [navigate, isAuthenticated, location]);
+
+  useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
 
-    if (isAuthenticated) {
-      navigate(from);
-    }
-
-    return () => {};
-  }, [dispatch, error, alert, navigate, isAuthenticated, location]);
+    return () => { };
+  }, [dispatch, error, alert]);
 
   return (
     <>

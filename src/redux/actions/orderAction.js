@@ -1,3 +1,4 @@
+import apiClient from "../../api/apiClient";
 import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
@@ -19,78 +20,143 @@ import {
   ORDER_DETAILS_FAIL,
   CLEAR_ERRORS,
 } from "../constants/orderConstants";
-import axios from "axios";
 
 // Create Order
 export const createOrder = (order, token) => async (dispatch) => {
-  try {
-    dispatch({ type: CREATE_ORDER_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: CREATE_ORDER_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!order) {
+    dispatch({
+      type: CREATE_ORDER_FAIL,
+      payload: 'Order data is required',
+    });
+    return;
+  }
+
+  dispatch({ type: CREATE_ORDER_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.post("/api/v1/order/new", order, config);
+    const response = await apiClient.post(`/order/new`, order, options);
 
-    dispatch({
-      type: CREATE_ORDER_SUCCESS,
-      payload: data.result,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: CREATE_ORDER_SUCCESS,
+        payload: response.result,
+      });
+    }
+    else {
+      dispatch({
+        type: CREATE_ORDER_FAIL,
+        payload: response.message || 'An error occurred while creating new order',
+      });
+    }
   } catch (error) {
     dispatch({
       type: CREATE_ORDER_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // My Orders
 export const myOrders = (token) => async (dispatch) => {
-  try {
-    dispatch({ type: MY_ORDERS_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: MY_ORDERS_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  dispatch({ type: MY_ORDERS_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.get("/api/v1/orders/me", config);
+    const response = await apiClient.get(`/orders/me`, options);
 
-    dispatch({
-      type: MY_ORDERS_SUCCESS,
-      payload: data.results,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: MY_ORDERS_SUCCESS,
+        payload: response.results,
+      });
+    }
+    else {
+      dispatch({
+        type: MY_ORDERS_FAIL,
+        payload: response.message || 'An error occurred while fetching my orders',
+      });
+    }
   } catch (error) {
     dispatch({
       type: MY_ORDERS_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Get All Orders (admin)
 export const getAllOrders = (token) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_ORDERS_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const { data } = await axios.get("/api/v1/admin/orders", config);
-
+  if (!token) {
     dispatch({
-      type: ALL_ORDERS_SUCCESS,
-      payload: data.results,
+      type: ALL_ORDERS_FAIL,
+      payload: 'Token is required',
     });
+    return;
+  }
+
+  dispatch({ type: ALL_ORDERS_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = { 'Authorization': `Bearer ${token}` };
+
+    const response = await apiClient.get(`/admin/orders`, options);
+
+    if (response.status === 200) {
+      dispatch({
+        type: ALL_ORDERS_SUCCESS,
+        payload: response.results,
+      });
+    }
+    else {
+      dispatch({
+        type: ALL_ORDERS_FAIL,
+        payload: response.message || 'An error occurred while fetching products',
+      });
+    }
   } catch (error) {
     dispatch({
       type: ALL_ORDERS_FAIL,
@@ -101,82 +167,164 @@ export const getAllOrders = (token) => async (dispatch) => {
 
 // Update Order
 export const updateOrder = (id, order, token) => async (dispatch) => {
-  try {
-    dispatch({ type: UPDATE_ORDER_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const { data } = await axios.put(
-      `/api/v1/admin/order/${id}`,
-      order,
-      config
-    );
-
+  if (!token) {
     dispatch({
-      type: UPDATE_ORDER_SUCCESS,
-      payload: data.success,
+      type: UPDATE_ORDER_FAIL,
+      payload: 'Token is required',
     });
+    return;
+  }
+
+  if (!order) {
+    dispatch({
+      type: UPDATE_ORDER_FAIL,
+      payload: 'Order data is required',
+    });
+    return;
+  }
+
+  if (!id) {
+    dispatch({
+      type: UPDATE_ORDER_FAIL,
+      payload: 'Order id is required',
+    });
+    return;
+  }
+
+  dispatch({ type: UPDATE_ORDER_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = { 'Authorization': `Bearer ${token}` };
+
+    const response = await apiClient.put(`/admin/order/${id}`, order, options);
+
+    if (response.status === 200) {
+      dispatch({
+        type: UPDATE_ORDER_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: UPDATE_ORDER_FAIL,
+        payload: response.message || 'An error occurred while updating order',
+      });
+    }
   } catch (error) {
     dispatch({
       type: UPDATE_ORDER_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Delete Order
 export const deleteOrder = (id, token) => async (dispatch) => {
-  try {
-    dispatch({ type: DELETE_ORDER_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const { data } = await axios.delete(`/api/v1/admin/order/${id}`, config);
-
+  if (!token) {
     dispatch({
-      type: DELETE_ORDER_SUCCESS,
-      payload: data.success,
+      type: DELETE_ORDER_FAIL,
+      payload: 'Token is required',
     });
+    return;
+  }
+
+  if (!id) {
+    dispatch({
+      type: DELETE_ORDER_FAIL,
+      payload: 'Order id is required',
+    });
+    return;
+  }
+
+  dispatch({ type: DELETE_ORDER_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = { 'Authorization': `Bearer ${token}` };
+
+    const response = await apiClient.delete(`/admin/order/${id}`, options);
+
+    if (response.status === 200) {
+      dispatch({
+        type: DELETE_ORDER_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: DELETE_ORDER_FAIL,
+        payload: response.message || 'An error occurred while deleting order',
+      });
+    }
   } catch (error) {
     dispatch({
       type: DELETE_ORDER_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Get Order Details
 export const getOrderDetails = (id, token) => async (dispatch) => {
-  try {
-    dispatch({ type: ORDER_DETAILS_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/v1/order/${id}`, config);
-
+  if (!token) {
     dispatch({
-      type: ORDER_DETAILS_SUCCESS,
-      payload: data.result,
+      type: ORDER_DETAILS_FAIL,
+      payload: 'Token is required',
     });
+    return;
+  }
+
+  if (!id) {
+    dispatch({
+      type: ORDER_DETAILS_FAIL,
+      payload: 'Order id is required',
+    });
+    return;
+  }
+
+  dispatch({ type: ORDER_DETAILS_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = { 'Authorization': `Bearer ${token}` };
+
+    const response = await apiClient.get(`/order/${id}`, options);
+
+    if (response.status === 200) {
+      dispatch({
+        type: ORDER_DETAILS_SUCCESS,
+        payload: response.result,
+      });
+    }
+    else {
+      dispatch({
+        type: ORDER_DETAILS_FAIL,
+        payload: response.message || 'An error occurred while fetching order details',
+      });
+    }
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };

@@ -54,26 +54,21 @@ const Products = () => {
   const totalPages = Math.ceil(productsCount / resultPerPage);
 
   useEffect(() => {
+    dispatch(getProducts(keyword, currentPage, minPrice, maxPrice, category, ratings));
+    return () => { };
+  }, [
+    dispatch, keyword, currentPage, minPrice,
+    maxPrice, category, ratings,
+  ]);
+
+  useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
 
-    dispatch(
-      getProducts(keyword, currentPage, minPrice, maxPrice, category, ratings)
-    );
-    return () => {};
-  }, [
-    dispatch,
-    error,
-    alert,
-    keyword,
-    currentPage,
-    minPrice,
-    maxPrice,
-    category,
-    ratings,
-  ]);
+    return () => { };
+  }, [dispatch, error, alert]);
 
   return (
     <div className="app__top-margin">

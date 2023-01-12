@@ -37,7 +37,6 @@ import {
   USER_DETAILS_FAIL,
   CLEAR_ERRORS,
 } from "../constants/userConstants";
-import axios from "axios";
 
 // Login
 export const login = (email, password) => async (dispatch) => {
@@ -286,193 +285,359 @@ export const updateProfile = (userData, token) => async (dispatch) => {
 
 // Update Password
 export const updatePassword = (passwords, token) => async (dispatch) => {
-  try {
-    dispatch({ type: UPDATE_PASSWORD_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!passwords) {
+    dispatch({
+      type: UPDATE_PASSWORD_FAIL,
+      payload: 'Passwords are required',
+    });
+    return;
+  }
+
+  if (!token) {
+    dispatch({
+      type: UPDATE_PASSWORD_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  dispatch({ type: UPDATE_PASSWORD_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.put(
-      `/api/v1/password/update`,
-      passwords,
-      config
-    );
+    const response = await apiClient.put('/password/update', passwords, options);
 
-    dispatch({
-      type: UPDATE_PASSWORD_SUCCESS,
-      payload: data.success,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: UPDATE_PASSWORD_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: UPDATE_PASSWORD_FAIL,
+        payload: response.message || 'An error occurred while updating password',
+      });
+    }
   } catch (error) {
     dispatch({
       type: UPDATE_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Forgot Password
 export const forgotPassword = (email) => async (dispatch) => {
-  try {
-    dispatch({ type: FORGOT_PASSWORD_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const { data } = await axios.post(`/api/v1/password/forgot`, email, config);
-
+  if (!email) {
     dispatch({
-      type: FORGOT_PASSWORD_SUCCESS,
-      payload: data.message,
+      type: FORGOT_PASSWORD_FAIL,
+      payload: 'Email is required',
     });
+    return;
+  }
+
+  dispatch({ type: FORGOT_PASSWORD_REQUEST });
+
+  try {
+    const response = await apiClient.post('/password/forgot', email);
+
+    if (response.status === 200) {
+      dispatch({
+        type: FORGOT_PASSWORD_SUCCESS,
+        payload: response.message,
+      });
+    }
+    else {
+      dispatch({
+        type: FORGOT_PASSWORD_FAIL,
+        payload: response.message || 'An error occurred while sending password reset email',
+      });
+    }
   } catch (error) {
     dispatch({
       type: FORGOT_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Reset Password
 export const resetPassword = (token, passwords) => async (dispatch) => {
-  try {
-    dispatch({ type: RESET_PASSWORD_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const { data } = await axios.put(
-      `/api/v1/password/reset/${token}`,
-      passwords,
-      config
-    );
-
+  if (!passwords) {
     dispatch({
-      type: RESET_PASSWORD_SUCCESS,
-      payload: data.success,
+      type: RESET_PASSWORD_FAIL,
+      payload: 'Passwords are required',
     });
+    return;
+  }
+
+  if (!token) {
+    dispatch({
+      type: RESET_PASSWORD_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  dispatch({ type: RESET_PASSWORD_REQUEST });
+
+  try {
+    const response = await apiClient.put(`/password/reset/${token}`, passwords);
+
+    if (response.status === 200) {
+      dispatch({
+        type: RESET_PASSWORD_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: RESET_PASSWORD_FAIL,
+        payload: response.message || 'An error occurred while resetting password',
+      });
+    }
   } catch (error) {
     dispatch({
       type: RESET_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // get All Users
 export const getAllUsers = (token) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_USERS_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: ALL_USERS_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  dispatch({ type: ALL_USERS_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.get(`/api/v1/admin/users`, config);
-    console.log(data);
+    const response = await apiClient.get(`/admin/users`, options);
 
-    dispatch({
-      type: ALL_USERS_SUCCESS,
-      payload: data.results,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: ALL_USERS_SUCCESS,
+        payload: response.results,
+      });
+    }
+    else {
+      dispatch({
+        type: ALL_USERS_FAIL,
+        payload: response.message || 'An error occurred while fetching users',
+      });
+    }
   } catch (error) {
     dispatch({
       type: ALL_USERS_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // get  User Details
 export const getUserDetails = (id, token) => async (dispatch) => {
-  try {
-    dispatch({ type: USER_DETAILS_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: USER_DETAILS_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!id) {
+    dispatch({
+      type: USER_DETAILS_FAIL,
+      payload: 'User Id is required',
+    });
+    return;
+  }
+
+  dispatch({ type: USER_DETAILS_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.get(`/api/v1/admin/user/${id}`, config);
+    const response = await apiClient.get(`/admin/user/${id}`, options);
 
-    dispatch({
-      type: USER_DETAILS_SUCCESS,
-      payload: data.result,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: USER_DETAILS_SUCCESS,
+        payload: response.result,
+      });
+    }
+    else {
+      dispatch({
+        type: USER_DETAILS_FAIL,
+        payload: response.message || 'An error occurred while fetching user details',
+      });
+    }
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Update User
 export const updateUser = (id, userData, token) => async (dispatch) => {
-  try {
-    dispatch({ type: UPDATE_USER_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: UPDATE_USER_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!id) {
+    dispatch({
+      type: UPDATE_USER_FAIL,
+      payload: 'User Id is required',
+    });
+    return;
+  }
+
+  if (!userData) {
+    dispatch({
+      type: UPDATE_USER_FAIL,
+      payload: 'User data is required',
+    });
+    return;
+  }
+
+  dispatch({ type: UPDATE_USER_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
     };
 
-    const { data } = await axios.put(
-      `/api/v1/admin/user/${id}`,
-      userData,
-      config
-    );
+    const response = await apiClient.put(`/admin/user/${id}`, userData, options);
 
-    dispatch({
-      type: UPDATE_USER_SUCCESS,
-      payload: data.success,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        payload: response.success,
+      });
+    }
+    else {
+      dispatch({
+        type: UPDATE_USER_FAIL,
+        payload: response.message || 'An error occurred while updating user details',
+      });
+    }
   } catch (error) {
     dispatch({
       type: UPDATE_USER_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };
 
 // Delete User
 export const deleteUser = (id, token) => async (dispatch) => {
-  try {
-    dispatch({ type: DELETE_USER_REQUEST });
+  if (!dispatch) {
+    console.log('dispatch is undefined');
+    return;
+  }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    dispatch({
+      type: DELETE_USER_FAIL,
+      payload: 'Token is required',
+    });
+    return;
+  }
+
+  if (!id) {
+    dispatch({
+      type: DELETE_USER_FAIL,
+      payload: 'User Id is required',
+    });
+    return;
+  }
+
+  dispatch({ type: DELETE_USER_REQUEST });
+
+  try {
+    const options = {};
+
+    options.headers = {
+      'Authorization': `Bearer ${token}`,
     };
 
-    const { data } = await axios.delete(`/api/v1/admin/user/${id}`, config);
+    const response = await apiClient.delete(`/admin/user/${id}`, options);
 
-    dispatch({
-      type: DELETE_USER_SUCCESS,
-      payload: data,
-    });
+    if (response.status === 200) {
+      dispatch({
+        type: DELETE_USER_SUCCESS,
+        payload: response,
+      });
+    }
+    else {
+      dispatch({
+        type: DELETE_USER_FAIL,
+        payload: response.message || 'An error occurred while deleting user',
+      });
+    }
   } catch (error) {
     dispatch({
       type: DELETE_USER_FAIL,
-      payload: error.response.data.message,
+      payload: error.message || error,
     });
   }
 };

@@ -39,11 +39,6 @@ function ResetPassword() {
   };
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-
     if (success) {
       alert.success("Password Updated Successfully");
 
@@ -54,8 +49,17 @@ function ResetPassword() {
       });
     }
 
-    return () => {};
-  }, [dispatch, error, alert, navigate, success]);
+    return () => { };
+  }, [dispatch, alert, navigate, success]);
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+
+    return () => { };
+  }, [dispatch, error, alert]);
 
   return (
     <>

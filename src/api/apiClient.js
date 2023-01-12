@@ -23,9 +23,6 @@ async function apiClient(endpoint, method, { body, ...options } = {}) {
         config.data = JSON.stringify(body);
     }
 
-    console.log('config', config);
-    console.log('headers', headers);
-
     let baseUrl = 'https://nixlab-ecommerce-api.cyclic.app/api/v1';
 
     try {
