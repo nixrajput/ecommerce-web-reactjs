@@ -1,6 +1,6 @@
 # Contributing to the E-commerce Website
 
-We appreciate your interest in contributing to the E-commerce Website built with React.js and CSS. By contributing, you help make this project better and more accessible for others. Please take a moment to review the following guidelines to ensure a smooth and collaborative development process.
+We appreciate your interest in contributing to the E-commerce Website built with React.js, CSS, and Redux. By contributing, you help make this project better and more accessible for others. Please take a moment to review the following guidelines to ensure a smooth and collaborative development process.
 
 ## Code of Conduct
 
