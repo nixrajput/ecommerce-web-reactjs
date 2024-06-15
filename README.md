@@ -1,6 +1,6 @@
-# E-commerce Website with React.js and CSS
+# E-commerce Website with React.js, CSS, and Redux
 
-This repository contains the source code for a E-commerce website built using React.js and CSS. This README.md file provides an overview of the project and instructions on how to set it up and customize it for your own use.
+This repository contains the source code for a E-commerce website built using React.js, CSS, and Redux. This README.md file provides an overview of the project and instructions on how to set it up and customize it for your own use.
 
 [![Stars](https://img.shields.io/github/stars/nixrajput/ecommerce-web-reactjs?label=Stars&style=flat)][repo]
 [![Forks](https://img.shields.io/github/forks/nixrajput/ecommerce-web-reactjs?label=Forks&style=flat)][repo]
@@ -14,13 +14,14 @@ This repository contains the source code for a E-commerce website built using Re
 
 ## Table of Contents
 
-- [E-commerce Website with React.js and CSS](#e-commerce-website-with-reactjs-and-css)
+- [E-commerce Website with React.js, CSS, and Redux](#e-commerce-website-with-reactjs-css-and-redux)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Sceenshots](#sceenshots)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+  - [Configuration](#configuration)
   - [Usage](#usage)
   - [Deployment](#deployment)
   - [Contributing](#contributing)
@@ -30,8 +31,13 @@ This repository contains the source code for a E-commerce website built using Re
 
 ## Features
 
-- Responsive design for various screen sizes.
-- Easily customizable with CSS for styling.
+- **Product Listing:** Display a list of products with pagination.
+- **Product Details:** View detailed information about a specific product.
+- **Shopping Cart:** Add products to the cart and manage quantities.
+- **User Authentication:** Register, login, and manage user accounts.
+- **Order Management:** Place orders and view order history.
+- **State Management:** Use Redux for state management.
+- **Responsive Design:** Mobile-friendly and responsive user interface.
 
 ## Sceenshots
 
@@ -87,16 +93,20 @@ You need to have the following software installed on your computer:
    yarn install
    ```
 
+## Configuration
+
+Create a `.env.local` file in the root directory and add the necessary environment variables. You can refer to the `.env.example` file for the required variables.
+
 ## Usage
 
 To start the development server and view the website locally, run the following command:
 
 ```bash
-npm run dev
+npm run start
 #or
-pnpm run dev
+pnpm run start
 # or
-yarn dev
+yarn start
 ```
 
 This will start the Next.js development server, and you can access the website in your web browser at `http://localhost:3000`.
