@@ -17,6 +17,7 @@ This repository contains the source code for a E-commerce website built using Re
 - [E-commerce Website with React.js and CSS](#e-commerce-website-with-reactjs-and-css)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
+  - [Sceenshots](#sceenshots)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
@@ -32,10 +33,12 @@ This repository contains the source code for a E-commerce website built using Re
 - Responsive design for various screen sizes.
 - Easily customizable with CSS for styling.
 
-<!-- ## Sceenshots
+## Sceenshots
 
-![Screenshot 1](/screenshot-desktop.png)
-![Screenshot 2](/screenshot-mobile.png) -->
+![Screenshot 1](/screenshots/ecomm-1.png)
+![Screenshot 2](/screenshots/ecomm-4.png)
+![Screenshot 2](/screenshots/ecomm-2.png)
+![Screenshot 2](/screenshots/ecomm-3.png)
 
 ## Getting Started
 
