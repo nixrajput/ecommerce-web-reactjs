@@ -23,7 +23,11 @@ async function apiClient(endpoint, method, { body, ...options } = {}) {
     config.data = JSON.stringify(body);
   }
 
-  let baseUrl = "https://ecommerce-api-nodejs-lime.vercel.app/api/v1";
+  const baseUrl = process.env.REACT_APP_BASE_API_URL;
+
+  if (!baseUrl) {
+    throw new Error("API url is not defined");
+  }
 
   try {
     const response = await axios(`${baseUrl}${endpoint}`, config);
