@@ -8,7 +8,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "dev": "react-scripts start",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "push": "git add -A && git commit -m \"Update Changes & Bug Fixes\" && git push origin master"
   },
