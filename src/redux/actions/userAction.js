@@ -318,9 +318,16 @@ export const updatePassword = (passwords, token) => async (dispatch) => {
     const response = await apiClient.put('/password/update', passwords, options);
 
     if (response.status === 200) {
+      // The API revokes the old token on a password change. APIs before 1.2.0 return no token and keep the old one.
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("expiresAt", response.expiresAt);
+      }
+
       dispatch({
         type: UPDATE_PASSWORD_SUCCESS,
         payload: response.success,
+        token: response.token,
       });
     }
     else {
