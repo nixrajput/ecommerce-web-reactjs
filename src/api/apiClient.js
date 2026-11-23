@@ -49,7 +49,13 @@ async function apiClient(endpoint, method, { body, ...options } = {}) {
     if (import.meta.env.DEV) {
       console.log("apiClientError:", error);
     }
-    throw new Error(error.response.data.message || error.message, {
+    if (axios.isAxiosError(error) && !error.response) {
+      throw new Error(
+        "Cannot reach the server. Check your connection and try again.",
+        { cause: error }
+      );
+    }
+    throw new Error(error.response?.data?.message || error.message, {
       cause: error,
     });
   }
