@@ -196,12 +196,11 @@ export const createProduct = (productData, token) => async (dispatch) => {
 
     options.headers = {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data',
     };
 
     const response = await apiClient.post(`/admin/product/create`, productData, options);
 
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       dispatch({
         type: NEW_PRODUCT_SUCCESS,
         payload: response,
@@ -259,7 +258,6 @@ export const updateProduct = (id, productData, token) => async (dispatch) => {
 
     options.headers = {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data',
     };
 
     const response = await apiClient.put(`/admin/product/${encodeURIComponent(id)}`, productData, options);

@@ -63,6 +63,12 @@ export const userReducer = (state = { user: {} }, action) => {
         token: action.payload.token,
       };
 
+    case UPDATE_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        token: action.token || state.token,
+      };
+
     case LOGOUT_SUCCESS:
       return {
         loading: false,

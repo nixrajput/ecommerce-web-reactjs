@@ -86,7 +86,7 @@ function OrderSummary() {
                       <img src={item.image} alt="Product" />
 
                       <div className="details">
-                        <Link to={`/product/${item.product}`}>{item.name}</Link>
+                        <Link to={`/products/${item.product}`}>{item.name}</Link>
                         <span>
                           {item.quantity} X ₹{currency.format(item.price)} ={" "}
                           <b>₹{currency.format(item.price * item.quantity)}</b>
