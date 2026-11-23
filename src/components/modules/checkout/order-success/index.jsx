@@ -1,5 +1,4 @@
 import "../Checkout.css";
-import React from "react";
 import { BsFillPatchCheckFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import AppWrap from "../../../hoc/AppWrap";

@@ -1,5 +1,4 @@
 import "./About.css";
-import React from "react";
 import MetaData from "../../layout/MetaData";
 import AppWrap from "../../hoc/AppWrap";
 import LogoImg from "../../../assets/images/logo.png";

@@ -22,7 +22,7 @@ export const cartReducer = (
         loading: true,
       };
 
-    case ADD_TO_CART_SUCCESS:
+    case ADD_TO_CART_SUCCESS: {
       const item = action.payload;
 
       const isItemExist = state.cartItems.find(
@@ -44,6 +44,7 @@ export const cartReducer = (
           cartItems: [...state.cartItems, item],
         };
       }
+    }
 
     case REMOVE_CART_ITEM_REQUEST:
       return {

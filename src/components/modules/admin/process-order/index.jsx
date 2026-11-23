@@ -203,9 +203,7 @@ function ProcessOrder() {
                         marginTop: "1rem",
                       }}
                       type="submit"
-                      disabled={
-                        loading ? true : false || status === "" ? true : false
-                      }
+                      disabled={loading || status === ""}
                     >
                       Process
                     </button>

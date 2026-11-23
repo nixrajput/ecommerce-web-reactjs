@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
@@ -66,13 +66,13 @@ const AlertTemplate = ({ style, options, message, close }) => (
   </div>
 );
 
-ReactDOM.render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <AlertProvider template={AlertTemplate} {...options}>
+      {/* React 19 ignores defaultProps on function components, and react-alert needs its context default */}
+      <AlertProvider template={AlertTemplate} {...AlertProvider.defaultProps} {...options}>
         <App />
       </AlertProvider>
     </Provider>
-  </StrictMode>,
-  document.getElementById("root")
+  </StrictMode>
 );
