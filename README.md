@@ -54,7 +54,7 @@ Follow these instructions to get the project up and running on your local machin
 
 You need to have the following software installed on your computer:
 
-- [Node.js](https://nodejs.org/) (LTS version recommended)
+- [Node.js](https://nodejs.org/) 22.12 or newer (the Vite 8 and Vitest 5 toolchain needs it)
 - [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) package manager
 
 ### Installation
@@ -95,7 +95,7 @@ You need to have the following software installed on your computer:
 
 ## Configuration
 
-Create a `.env.local` file in the root directory and add the necessary environment variables. You can refer to the `.env.example` file for the required variables.
+Create a `.env.local` file in the root directory and set `VITE_BASE_API_URL` to the API base URL, including the `/api/v1` prefix, for example `https://api.example.com/api/v1`. Vite copies every `VITE_*` variable into the browser bundle, so never put a secret in one.
 
 ## Usage
 
@@ -109,13 +109,13 @@ pnpm run start
 yarn start
 ```
 
-This will start the Next.js development server, and you can access the website in your web browser at `http://localhost:3000`.
+This will start the Vite development server, and you can access the website in your web browser at `http://localhost:3000`.
 
 ## Deployment
 
-To deploy the portfolio website to a hosting service of your choice, follow the deployment instructions for Next.js applications. Some popular hosting options include Vercel, Netlify, and GitHub Pages.
+Run `pnpm run build` to create a static production build in the `build/` folder, and deploy that folder to any static host, for example Vercel, Netlify, or GitHub Pages. Configure the host to serve `index.html` for unknown paths, because the app uses client-side routing.
 
-Remember to configure environment variables for sensitive information like email credentials if needed.
+Set `VITE_BASE_API_URL` on the host at build time. Every `VITE_*` value is public in the bundle, so keep secrets on the API server.
 
 ## Contributing
 
