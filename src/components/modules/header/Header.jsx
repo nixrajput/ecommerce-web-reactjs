@@ -21,7 +21,9 @@ import profilePng from "../../../assets/images/profile.jpg";
 function Header() {
   const dispatch = useDispatch();
 
-  const { isAuthenticated, user, loading } = useSelector((state) => state.user);
+  const { isAuthenticated, user, loading, token } = useSelector(
+    (state) => state.user
+  );
   const { cartItems } = useSelector((state) => state.cart);
 
   const navigate = useNavigate();
@@ -41,7 +43,7 @@ function Header() {
   const openMenu = Boolean(anchorEl);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout(token));
   };
 
   const navigateToDashboard = () => {

@@ -20,7 +20,9 @@ async function apiClient(endpoint, method, { body, ...options } = {}) {
   };
 
   if (body) {
-    config.data = JSON.stringify(body);
+    // With a JSON Content-Type, axios sends FormData as a JSON object, and repeated keys become arrays.
+    // The API caps multipart text fields at 1 MB, which a base64 image can exceed.
+    config.data = body;
   }
 
   const baseUrl = import.meta.env.VITE_BASE_API_URL;
