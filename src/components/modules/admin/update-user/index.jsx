@@ -212,13 +212,7 @@ function UpdateUser() {
                   marginTop: 20,
                 }}
                 type="submit"
-                disabled={
-                  updateLoading
-                    ? true
-                    : false || currentUser.role === "user"
-                    ? true
-                    : false
-                }
+                disabled={updateLoading || currentUser.role === "user"}
               >
                 Update
               </button>

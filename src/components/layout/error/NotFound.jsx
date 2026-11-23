@@ -1,5 +1,4 @@
 import "./NotFound.css";
-import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
 import { Link } from "react-router-dom";
 

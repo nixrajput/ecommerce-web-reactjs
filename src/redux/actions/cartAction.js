@@ -46,7 +46,7 @@ export const addItemsToCart = (id, quantity) => async (dispatch, getState) => {
   dispatch({ type: ADD_TO_CART_REQUEST });
 
   try {
-    const response = await apiClient.get(`/product/${id}`);
+    const response = await apiClient.get(`/product/${encodeURIComponent(id)}`);
 
     if (response.status === 200) {
       dispatch({

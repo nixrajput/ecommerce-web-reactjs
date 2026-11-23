@@ -16,6 +16,17 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.db
+*.sqlite
+*.sqlite3
+
+.playwright-mcp/
 
 npm-debug.log*
 yarn-debug.log*

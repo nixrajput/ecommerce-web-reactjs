@@ -4,7 +4,7 @@ import { useAlert } from "react-alert";
 import { useSelector, useDispatch } from "react-redux";
 import { FaCalendarAlt, FaCreditCard, FaKey } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../../../api/apiClient";
 import {
   CardNumberElement,
   CardCvcElement,
@@ -40,6 +40,7 @@ function Payment() {
   const paymentData = {
     amount: Math.round(orderInfo.totalPrice * 100),
     email: user.email,
+    orderItems: cartItems,
   };
 
   const order = {
@@ -58,18 +59,9 @@ function Payment() {
     setLoading(true);
 
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const { data } = await axios.post(
-        "/api/v1/payment/create",
-        paymentData,
-        config
-      );
+      const data = await apiClient.post("/payment/create", paymentData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       const client_secret = data.client_secret;
 
@@ -117,7 +109,7 @@ function Payment() {
     } catch (error) {
       payBtn.current.disabled = false;
       setLoading(false);
-      alert.error(error.response.data.message);
+      alert.error(error.message);
     }
   };
 

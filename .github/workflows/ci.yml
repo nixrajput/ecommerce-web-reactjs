@@ -17,14 +17,13 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    # Dummy build-time env so the CRA build, which inlines REACT_APP_* vars,
-    # succeeds in CI. CI=true also makes react-scripts test run once and exit
-    # instead of hanging in interactive watch mode.
+    # Dummy build-time env so the Vite build, which inlines VITE_* vars,
+    # succeeds in CI.
     env:
       CI: "true"
-      REACT_APP_BASE_API_URL: http://localhost
+      VITE_BASE_API_URL: http://localhost
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -39,20 +38,22 @@ jobs:
           else echo "pm=npm" >> "$GITHUB_OUTPUT"; fi
 
       - if: steps.pm.outputs.pm == 'pnpm'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
-          version: 9
+          version: 9.15.9
       - if: steps.pm.outputs.pm == 'bun'
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - if: steps.pm.outputs.pm != 'bun'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
           cache: ${{ steps.pm.outputs.pm }}
 
       - name: Install
+        env:
+          PM: ${{ steps.pm.outputs.pm }}
         run: |
-          case "${{ steps.pm.outputs.pm }}" in
+          case "$PM" in
             bun) bun install --frozen-lockfile ;;
             pnpm) pnpm install --frozen-lockfile ;;
             yarn) yarn install --frozen-lockfile ;;

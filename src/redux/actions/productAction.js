@@ -100,7 +100,7 @@ export const getProductDetails = (id) => async (dispatch) => {
   dispatch({ type: PRODUCT_DETAILS_REQUEST });
 
   try {
-    const response = await apiClient.get(`/product/${id}`);
+    const response = await apiClient.get(`/product/${encodeURIComponent(id)}`);
 
     if (response.status === 200) {
       dispatch({
@@ -262,7 +262,7 @@ export const updateProduct = (id, productData, token) => async (dispatch) => {
       'Content-Type': 'multipart/form-data',
     };
 
-    const response = await apiClient.put(`/admin/product/${id}`, productData, options);
+    const response = await apiClient.put(`/admin/product/${encodeURIComponent(id)}`, productData, options);
 
     if (response.status === 200) {
       dispatch({
@@ -316,7 +316,7 @@ export const deleteProduct = (id, token) => async (dispatch) => {
       'Authorization': `Bearer ${token}`,
     };
 
-    const response = await apiClient.delete(`/admin/product/${id}`, options);
+    const response = await apiClient.delete(`/admin/product/${encodeURIComponent(id)}`, options);
 
     if (response.status === 200) {
       dispatch({
@@ -424,7 +424,7 @@ export const getAllReviews = (id, token) => async (dispatch) => {
       'Authorization': `Bearer ${token}`,
     };
 
-    const response = await apiClient.get(`/reviews?id=${id}`, options);
+    const response = await apiClient.get(`/reviews?id=${encodeURIComponent(id)}`, options);
 
     if (response.status === 200) {
       dispatch({
@@ -486,7 +486,7 @@ export const deleteReviews = (reviewId, productId, token) => async (dispatch) =>
       'Authorization': `Bearer ${token}`,
     };
 
-    const response = await apiClient.delete(`/reviews?id=${reviewId}&productId=${productId}`, options);
+    const response = await apiClient.delete(`/reviews?id=${encodeURIComponent(reviewId)}&productId=${encodeURIComponent(productId)}`, options);
 
     if (response.status === 200) {
       dispatch({

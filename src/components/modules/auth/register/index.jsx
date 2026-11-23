@@ -8,6 +8,7 @@ import Logo from "../../../../assets/images/logo.png";
 import { clearErrors, register } from "../../../../redux/actions/userAction";
 import Loader from "../../../layout/loader/Loader";
 import MetaData from "../../../layout/MetaData";
+import { getSafeRedirect } from "../../../helpers/redirect";
 
 function Register() {
   const dispatch = useDispatch();
@@ -45,8 +46,9 @@ function Register() {
   useEffect(() => {
     let { from } = location.state || { from: { pathname: "/" } };
 
-    if (location.search) {
-      from = `/${location.search.split("=")[1]}`;
+    const redirect = getSafeRedirect(location.search);
+    if (redirect) {
+      from = redirect;
     }
 
     if (isAuthenticated) {

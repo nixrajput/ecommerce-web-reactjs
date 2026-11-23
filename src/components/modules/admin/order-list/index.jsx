@@ -97,13 +97,13 @@ function OrderList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/admin/orders/${params.getValue(params.id, "id")}`}>
+            <Link to={`/admin/orders/${params.row.id}`}>
               <EditIcon />
             </Link>
 
             <Button
               onClick={() =>
-                deleteOrderHandler(params.getValue(params.id, "id"))
+                deleteOrderHandler(params.row.id)
               }
             >
               <DeleteIcon />
@@ -162,7 +162,7 @@ function OrderList() {
           <DataGrid
             rows={rows}
             columns={columns}
-            disableSelectionOnClick
+            disableRowSelectionOnClick
             loading={loading}
             autoHeight
             className="custom-list-table"

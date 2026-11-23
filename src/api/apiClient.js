@@ -23,7 +23,7 @@ async function apiClient(endpoint, method, { body, ...options } = {}) {
     config.data = JSON.stringify(body);
   }
 
-  const baseUrl = process.env.REACT_APP_BASE_API_URL;
+  const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
   if (!baseUrl) {
     throw new Error("API url is not defined");
@@ -33,10 +33,7 @@ async function apiClient(endpoint, method, { body, ...options } = {}) {
     const response = await axios(`${baseUrl}${endpoint}`, config);
     let data = response.data;
     data.status = response.status;
-    if (
-      process.env.NODE_ENV !== "production" ||
-      process.env.NODE_ENV !== "prod"
-    ) {
+    if (import.meta.env.DEV) {
       console.table({
         endpoint,
         status: response.status,
@@ -49,8 +46,12 @@ async function apiClient(endpoint, method, { body, ...options } = {}) {
       throw new Error(data.message || "Something went wrong");
     }
   } catch (error) {
-    console.log("apiClientError:", error);
-    throw new Error(error.response.data.message || error.message);
+    if (import.meta.env.DEV) {
+      console.log("apiClientError:", error);
+    }
+    throw new Error(error.response.data.message || error.message, {
+      cause: error,
+    });
   }
 }
 

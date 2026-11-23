@@ -100,13 +100,13 @@ function UserList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/admin/users/${params.getValue(params.id, "id")}`}>
+            <Link to={`/admin/users/${params.row.id}`}>
               <EditIcon />
             </Link>
 
             <Button
               onClick={() =>
-                deleteUserHandler(params.getValue(params.id, "id"))
+                deleteUserHandler(params.row.id)
               }
             >
               <DeleteIcon />
@@ -177,7 +177,7 @@ function UserList() {
             columns={columns}
             loading={loading}
             autoHeight
-            disableSelectionOnClick
+            disableRowSelectionOnClick
             className="custom-list-table"
           />
         </div>
