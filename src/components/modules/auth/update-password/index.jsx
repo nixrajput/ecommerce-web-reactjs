@@ -18,6 +18,7 @@ function UpdatePassword() {
   const alert = useAlert();
   const navigate = useNavigate();
 
+  const { token } = useSelector((state) => state.user);
   const { error, loading, isUpdated } = useSelector((state) => state.profile);
 
   const [oldPassword, setOldPassword] = useState("");
@@ -27,13 +28,9 @@ function UpdatePassword() {
   const updatePasswordSubmit = (e) => {
     e.preventDefault();
 
-    const myForm = new FormData();
-
-    myForm.set("oldPassword", oldPassword);
-    myForm.set("newPassword", newPassword);
-    myForm.set("confirmPassword", confirmPassword);
-
-    dispatch(updatePassword(myForm));
+    dispatch(
+      updatePassword({ oldPassword, newPassword, confirmPassword }, token)
+    );
   };
 
   useEffect(() => {

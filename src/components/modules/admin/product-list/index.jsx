@@ -31,7 +31,7 @@ function ProductList() {
   );
 
   const deleteProductHandler = (id) => {
-    dispatch(deleteProduct(id));
+    dispatch(deleteProduct(id, token));
   };
 
   useEffect(() => {

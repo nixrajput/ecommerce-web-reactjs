@@ -168,29 +168,12 @@ export const loadUser = (token) => async (dispatch) => {
 
     const response = await apiClient.get('/user/me', options);
 
+    // The API rejects an expired or revoked token, so a 200 means the token is still valid.
     if (response.status === 200) {
-      if (
-        response.result.token &&
-        response.result.token === token &&
-        response.result.expiresAt > new Date().getTime() / 1000
-      ) {
-        const userData = {
-          user: response.result,
-          token: response.result.token,
-          expiresAt: response.result.expiresAt,
-        };
-
-        dispatch({
-          type: LOAD_USER_SUCCESS,
-          payload: userData,
-        });
-      } else {
-        dispatch(logout());
-        dispatch({
-          type: LOAD_USER_FAIL,
-          payload: "Token is invalid or expired.",
-        });
-      }
+      dispatch({
+        type: LOAD_USER_SUCCESS,
+        payload: { user: response.result, token },
+      });
     }
     else {
       dispatch(logout());
@@ -209,10 +192,22 @@ export const loadUser = (token) => async (dispatch) => {
 };
 
 // Logout User
-export const logout = () => async (dispatch) => {
+export const logout = (token) => async (dispatch) => {
   if (!dispatch) {
     console.log('dispatch is undefined');
     return;
+  }
+
+  if (token) {
+    try {
+      const options = {};
+
+      options.headers = { 'Authorization': `Bearer ${token}` };
+
+      await apiClient.get('/logout', options);
+    } catch {
+      // The local session still ends when the API cannot revoke the token.
+    }
   }
 
   try {
@@ -258,7 +253,6 @@ export const updateProfile = (userData, token) => async (dispatch) => {
 
     options.headers = {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data'
     };
 
     const response = await apiClient.put('/user/me/update', userData, options);
@@ -318,9 +312,16 @@ export const updatePassword = (passwords, token) => async (dispatch) => {
     const response = await apiClient.put('/password/update', passwords, options);
 
     if (response.status === 200) {
+      // The API revokes the old token on a password change. APIs before 1.2.0 return no token and keep the old one.
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("expiresAt", response.expiresAt);
+      }
+
       dispatch({
         type: UPDATE_PASSWORD_SUCCESS,
         payload: response.success,
+        token: response.token,
       });
     }
     else {
@@ -563,7 +564,6 @@ export const updateUser = (id, userData, token) => async (dispatch) => {
 
     options.headers = {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data'
     };
 
     const response = await apiClient.put(`/admin/user/${encodeURIComponent(id)}`, userData, options);

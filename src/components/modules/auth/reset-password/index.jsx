@@ -32,7 +32,7 @@ function ResetPassword() {
 
     const myForm = new FormData();
 
-    myForm.set("password", password);
+    myForm.set("newPassword", password);
     myForm.set("confirmPassword", confirmPassword);
 
     dispatch(resetPassword(token, myForm));
