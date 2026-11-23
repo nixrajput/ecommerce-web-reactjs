@@ -220,7 +220,7 @@ export const logout = () => async (dispatch) => {
     localStorage.removeItem("expiresAt");
 
     dispatch({ type: LOGOUT_SUCCESS });
-  } catch (error) {
+  } catch {
     dispatch({
       type: LOGOUT_FAIL,
       payload: "An error occurred while logging out",
@@ -403,7 +403,7 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
   dispatch({ type: RESET_PASSWORD_REQUEST });
 
   try {
-    const response = await apiClient.put(`/password/reset/${token}`, passwords);
+    const response = await apiClient.put(`/password/reset/${encodeURIComponent(token)}`, passwords);
 
     if (response.status === 200) {
       dispatch({
@@ -503,7 +503,7 @@ export const getUserDetails = (id, token) => async (dispatch) => {
       'Authorization': `Bearer ${token}`,
     };
 
-    const response = await apiClient.get(`/admin/user/${id}`, options);
+    const response = await apiClient.get(`/admin/user/${encodeURIComponent(id)}`, options);
 
     if (response.status === 200) {
       dispatch({
@@ -566,7 +566,7 @@ export const updateUser = (id, userData, token) => async (dispatch) => {
       'Content-Type': 'multipart/form-data'
     };
 
-    const response = await apiClient.put(`/admin/user/${id}`, userData, options);
+    const response = await apiClient.put(`/admin/user/${encodeURIComponent(id)}`, userData, options);
 
     if (response.status === 200) {
       dispatch({
@@ -620,7 +620,7 @@ export const deleteUser = (id, token) => async (dispatch) => {
       'Authorization': `Bearer ${token}`,
     };
 
-    const response = await apiClient.delete(`/admin/user/${id}`, options);
+    const response = await apiClient.delete(`/admin/user/${encodeURIComponent(id)}`, options);
 
     if (response.status === 200) {
       dispatch({

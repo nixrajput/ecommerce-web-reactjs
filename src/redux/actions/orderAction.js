@@ -203,7 +203,7 @@ export const updateOrder = (id, order, token) => async (dispatch) => {
 
     options.headers = { 'Authorization': `Bearer ${token}` };
 
-    const response = await apiClient.put(`/admin/order/${id}`, order, options);
+    const response = await apiClient.put(`/admin/order/${encodeURIComponent(id)}`, order, options);
 
     if (response.status === 200) {
       dispatch({
@@ -255,7 +255,7 @@ export const deleteOrder = (id, token) => async (dispatch) => {
 
     options.headers = { 'Authorization': `Bearer ${token}` };
 
-    const response = await apiClient.delete(`/admin/order/${id}`, options);
+    const response = await apiClient.delete(`/admin/order/${encodeURIComponent(id)}`, options);
 
     if (response.status === 200) {
       dispatch({
@@ -307,7 +307,7 @@ export const getOrderDetails = (id, token) => async (dispatch) => {
 
     options.headers = { 'Authorization': `Bearer ${token}` };
 
-    const response = await apiClient.get(`/order/${id}`, options);
+    const response = await apiClient.get(`/order/${encodeURIComponent(id)}`, options);
 
     if (response.status === 200) {
       dispatch({
